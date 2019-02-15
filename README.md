@@ -1,4 +1,4 @@
-#  -- 笔记
+#  — 笔记本
 
  -    创建Gitbook的步骤
 
@@ -9,7 +9,7 @@
        5.  创建html文件  --  gitbook build
        6.  浏览器实时查看  --  gitbook serve
 
-- 注意: 每一次的修改 SUMMARY.md 都需要初始化一次
+- <font color='red'>注意: 每一次的修改 SUMMARY.md 都需要初始化一次</font>
 
     
 
