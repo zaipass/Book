@@ -2,10 +2,10 @@
 
 - 在Django源代码中的search中的数据库查询
 - 用到的内置包 operator & functools
-    1. 数据库的'逻辑与 & '查询 - - Q
-        - Model.objects.filter(Q() & Q())
-    2. '逻辑或 | '
-        - Model.objects.filter(Q() | Q())
+- 数据库的'逻辑与(&)'查询 -- Q
+    - Model.objects.filter(Q() & Q())
+- '逻辑或(|)'
+    - Model.objects.filter(Q() | Q())
 
     ```python
 
