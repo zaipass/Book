@@ -140,7 +140,7 @@
     # 等同于重新定义 as_view() 类方法
     def drf_view(sc):
         # 传递参数
-        view = TotalView.as_view(graphiql=True, schema=sm)
+        view = TotalView.as_view(graphiql=True, schema=sc)
         view = permission_classes((OwnPermission, ))(view)
         # view = authentication_classes((TokenAuthentication,))(view)
         view = api_view(['GET', 'POST'])(view)
