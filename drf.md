@@ -148,9 +148,7 @@
     ```
 
     - <strong>注意: </strong> 
-    <span style="color: red">
-    urls会发生不同: as_view的重写则在url中传递参数, drf_view在方法中定义参数
-    </span>
+    <span style="color: red">urls会发生不同: as_view的重写则在url中传递参数, drf_view在方法中定义参数</span>
 
 6. app 下创建 schema 文件; 文件夹下创建 get.py/create.py/update.py ...
 
