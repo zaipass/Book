@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Graphql-Note · GitBook</title>
+        <title>修改/更新 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="base.html" />
+    <link rel="next" href="delete.html" />
     
     
-    <link rel="prev" href="./" />
+    <link rel="prev" href="create.html" />
     
 
     </head>
@@ -102,7 +102,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="./">
+        <li class="chapter " data-level="1.2" data-path="./">
             
                 <a href="./">
             
@@ -195,7 +195,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.5.2" data-path="update.html">
+        <li class="chapter active" data-level="1.2.5.2" data-path="update.html">
             
                 <a href="update.html">
             
@@ -231,7 +231,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3" data-path="./">
+        <li class="chapter " data-level="1.3" data-path="./">
             
                 <a href="./">
             
@@ -293,7 +293,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Graphql-Note</a>
+        <a href="." >修改/更新</a>
     </h1>
 </div>
 
@@ -308,7 +308,58 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x534E;&#x4ED4;---&#x7B14;&#x8BB0;">&#x534E;&#x4ED4; - &#x7B14;&#x8BB0;</h1>
+                                <h3 id="post---update-&#x65B9;&#x6CD5;">POST - update &#x65B9;&#x6CD5;</h3>
+<ol>
+<li><p>&#x540E;&#x7AEF;&#x4EE3;&#x7801;</p>
+<pre><code class="lang-python"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateInfo</span><span class="hljs-params">(graphene.Mutation)</span>:</span>
+     <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Arguments</span>:</span>
+         nickname = graphene.String()
+         pk = graphene.Int(required=<span class="hljs-keyword">True</span>)
+
+     info = graphene.Field(InfoType)
+     ok = graphene.Boolean()
+
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">mutate</span><span class="hljs-params">(self, info, **kwargs)</span>:</span>
+         pk = kwargs.get(<span class="hljs-string">&apos;pk&apos;</span>)
+         info_obj = Info.objects.get(id=pk)
+         <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> info_obj:
+             <span class="hljs-keyword">return</span> UpdateInfo(ok=<span class="hljs-keyword">False</span>)
+         info_obj.__dict__.update(**kwargs)
+         info_obj.save()
+         ok = <span class="hljs-keyword">True</span>
+         <span class="hljs-keyword">return</span> UpdateInfo(ok=ok, info=info_obj)
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateUser</span><span class="hljs-params">(graphene.Mutation)</span>:</span>
+     <span class="hljs-keyword">pass</span>
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UMutation</span><span class="hljs-params">(object)</span>:</span>
+     update_info = UpdateInfo.Field()
+
+     update_user = UpdateUser.Field()
+</code></pre>
+<pre><code class="lang-python"> <span class="hljs-comment"># &#x9879;&#x76EE;&#x603B; schema</span>
+ <span class="hljs-keyword">from</span> app.schema.update <span class="hljs-keyword">import</span> UMutation
+ <span class="hljs-keyword">from</span> app.schema.create <span class="hljs-keyword">import</span> CMutation
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Mutations</span><span class="hljs-params">(CMutation, UMutation, graphene.ObjectType)</span>:</span>
+     <span class="hljs-keyword">pass</span>
+
+ schema = graphene.Schema(mutation=Mutations)
+</code></pre>
+</li>
+<li><p>&#x4F20;&#x9012;&#x53C2;&#x6570;</p>
+<pre><code class="lang-javascript"> mutation updateInfoNick {
+     updateInfo (pk: <span class="hljs-number">1</span>, nickname: <span class="hljs-string">&quot;passion&quot;</span>) {
+         info {
+             id,
+             nickname
+         },
+         ok
+     }
+ }
+</code></pre>
+</li>
+</ol>
 
                                 
                                 </section>
@@ -336,12 +387,12 @@
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: Introduction">
+                <a href="create.html" class="navigation navigation-prev " aria-label="Previous page: 创建">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="base.html" class="navigation navigation-next " aria-label="Next page: 基础知识">
+                <a href="delete.html" class="navigation navigation-next " aria-label="Next page: 删除">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -352,7 +403,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Graphql-Note","level":"1.2","depth":1,"next":{"title":"基础知识","level":"1.2.1","depth":2,"path":"base.md","ref":"base.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"index.md","mtime":"2019-02-15T02:03:20.721Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:19:16.003Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"修改/更新","level":"1.2.5.2","depth":3,"next":{"title":"删除","level":"1.2.5.3","depth":3,"path":"delete.md","ref":"delete.md","articles":[]},"previous":{"title":"创建","level":"1.2.5.1","depth":3,"path":"create.md","ref":"create.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"update.md","mtime":"2019-02-19T05:23:48.809Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:19:16.003Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
