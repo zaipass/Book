@@ -308,7 +308,45 @@
     
                                 <section class="normal markdown-section">
                                 
-                                
+                                <h3 id="post---delete-&#x65B9;&#x6CD5;">POST - delete &#x65B9;&#x6CD5;</h3>
+<ol>
+<li><p>&#x540E;&#x7AEF;&#x4EE3;&#x7801;</p>
+<pre><code class="lang-python"> <span class="hljs-comment"># schema/delete.py</span>
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DeleteInfo</span><span class="hljs-params">(graphene.Mutation)</span>:</span>
+     <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Arguments</span>:</span>
+         pk = graphene.Int()
+
+     ok = graphene.Boolean()
+
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">mutate</span><span class="hljs-params">(self, info, **kwargs)</span>:</span>
+         pk = kwargs.get(<span class="hljs-string">&apos;pk&apos;</span>)
+
+         info = Info.objects.get(id=pk)
+         info.delete()
+         <span class="hljs-keyword">return</span> DeleteInfo(ok=<span class="hljs-keyword">True</span>)
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DMutation</span><span class="hljs-params">(object)</span>:</span>
+     delete_info = DeleteInfo.Field()
+</code></pre>
+<pre><code class="lang-python"> <span class="hljs-comment"># &#x9879;&#x76EE;&#x603B;&#x7684; schema </span>
+ <span class="hljs-keyword">from</span> app.schema.delete <span class="hljs-keyword">import</span> DMutation
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Mutations</span><span class="hljs-params">(DMutation, graphene.ObjectType)</span>:</span>
+     <span class="hljs-keyword">pass</span>
+
+ schema = graphene.Schema(mutation=Mutations)
+</code></pre>
+</li>
+<li><p>&#x4F20;&#x9012;&#x53C2;&#x6570;</p>
+<pre><code class="lang-javascript"> mutation deleteInfoNick {
+     deleteInfo (pk: <span class="hljs-number">1</span>) {
+         ok
+     }
+ }
+</code></pre>
+</li>
+</ol>
+
                                 
                                 </section>
                             
@@ -351,7 +389,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"删除","level":"1.2.5.3","depth":3,"next":{"title":"0214","level":"1.3","depth":1,"path":"index.md","ref":"index.md","articles":[{"title":"内置包的使用-数据库and查询","level":"1.3.1","depth":2,"path":"often.md","ref":"often.md","articles":[]}]},"previous":{"title":"修改/更新","level":"1.2.5.2","depth":3,"path":"update.md","ref":"update.md","articles":[]},"dir":"neutral"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"delete.md","mtime":"2019-02-19T01:45:24.637Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:38:50.109Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"删除","level":"1.2.5.3","depth":3,"next":{"title":"0214","level":"1.3","depth":1,"path":"index.md","ref":"index.md","articles":[{"title":"内置包的使用-数据库and查询","level":"1.3.1","depth":2,"path":"often.md","ref":"often.md","articles":[]}]},"previous":{"title":"修改/更新","level":"1.2.5.2","depth":3,"path":"update.md","ref":"update.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"delete.md","mtime":"2019-02-19T05:53:34.985Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:54:12.133Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
@@ -359,10 +397,6 @@
         
     <script src="gitbook/gitbook.js"></script>
     <script src="gitbook/theme.js"></script>
-    
-        
-        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
-        
     
         
         <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
