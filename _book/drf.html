@@ -363,31 +363,29 @@
 </code></pre>
 </li>
 <li><p>&#x5B9A;&#x4E49; models</p>
-<p> ```python
- from django.db import models</p>
+<pre><code class="lang-python"> <span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> models
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Info</span><span class="hljs-params">(models.Model)</span>:</span>
+     weight = models.DecimalField(max_digits=<span class="hljs-number">3</span>, 
+                                  decimal_places=<span class="hljs-number">1</span>,
+                                  verbose_name=<span class="hljs-string">&apos;&#x4F53;&#x91CD;&apos;</span>,
+                                  help_text=<span class="hljs-string">&apos;&#x4F53;&#x91CD;&apos;</span>)
+     nickname = models.CharField(max_length=<span class="hljs-number">20</span>)  
+     owner = models.ForeignKey(<span class="hljs-string">&apos;oauth2.user&apos;</span>,
+                               related_name=<span class="hljs-string">&apos;info_user&apos;</span>,
+                               on_delete=models.CASCADE,
+                               verbose_name=<span class="hljs-string">&apos;&#x7528;&#x6237;&apos;</span>,
+                               help_text=<span class="hljs-string">&apos;&#x7528;&#x6237;&apos;</span>)
+
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__str__</span><span class="hljs-params">(self)</span>:</span>
+         <span class="hljs-keyword">return</span> self.nickname 
+
+     <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meta</span>:</span>
+         verbose_name = <span class="hljs-string">&apos;&#x7528;&#x6237;&#x76F8;&#x5173;&#x4FE1;&#x606F;&apos;</span>
+         verbose_name_plural = verbose_name
+         ordering = (<span class="hljs-string">&apos;-pk&apos;</span>, )
+</code></pre>
 </li>
-</ol>
-<pre><code>class Info(models.Model):
-    weight = models.DecimalField(max_digits=3, 
-                                 decimal_places=1,
-                                 verbose_name=&apos;&#x4F53;&#x91CD;&apos;,
-                                 help_text=&apos;&#x4F53;&#x91CD;&apos;)
-    nickname = models.CharField(max_length=20)  
-    owner = models.ForeignKey(&apos;oauth2.user&apos;,
-                              related_name=&apos;info_user&apos;,
-                              on_delete=models.CASCADE,
-                              verbose_name=&apos;&#x7528;&#x6237;&apos;,
-                              help_text=&apos;&#x7528;&#x6237;&apos;)
-
-    def __str__(self):
-        return self.nickname 
-
-    class Meta:
-        verbose_name = &apos;&#x7528;&#x6237;&#x76F8;&#x5173;&#x4FE1;&#x606F;&apos;
-        verbose_name_plural = verbose_name
-        ordering = (&apos;-pk&apos;, )                                 
-```
-</code></pre><ol>
 <li><p>&#x521B;&#x5EFA; typemodels.py </p>
 <pre><code class="lang-python"> <span class="hljs-comment"># important!</span>
  <span class="hljs-keyword">from</span> graphene_django.types <span class="hljs-keyword">import</span> DjangoObjectType
@@ -400,94 +398,89 @@
 </code></pre>
 </li>
 <li><p>&#x5B9A;&#x4E49; app &#x89C6;&#x56FE; views</p>
-<p> ```python</p>
-<h1 id="&#x6743;&#x9650;">&#x6743;&#x9650;</h1>
-<p> from graphene_django.views import GraphQLView </p>
-<p> from rest_framework import viewsets, generics
- from rest_framework.permissions import IsAuthenticated, BasePermission
- from rest_framework.decorators import authentication_classes, permission_classes, api_view
- from rest_framework.settings import api_settings</p>
-</li>
-</ol>
-<pre><code># &#x5B9A;&#x4E49;&#x6743;&#x9650;&#x95EE;&#x9898;
-class OwnPermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        print(obj.owner, request.user, &apos;+++++++++ views.py&apos;)
-        if obj.owner == request.user:
-            return True
-        else:
-            return False
+<pre><code class="lang-python"> <span class="hljs-comment"># &#x6743;&#x9650;</span>
+ <span class="hljs-keyword">from</span> graphene_django.views <span class="hljs-keyword">import</span> GraphQLView 
 
-    def has_permission(self, request, view):
-        print(request.user, &apos;===&gt;&gt;&gt; L&apos;)
-        return True
+ <span class="hljs-keyword">from</span> rest_framework <span class="hljs-keyword">import</span> viewsets, generics
+ <span class="hljs-keyword">from</span> rest_framework.permissions <span class="hljs-keyword">import</span> IsAuthenticated, BasePermission
+ <span class="hljs-keyword">from</span> rest_framework.decorators <span class="hljs-keyword">import</span> authentication_classes, permission_classes, api_view
+ <span class="hljs-keyword">from</span> rest_framework.settings <span class="hljs-keyword">import</span> api_settings
 
+ <span class="hljs-comment"># &#x5B9A;&#x4E49;&#x6743;&#x9650;&#x95EE;&#x9898;</span>
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OwnPermission</span><span class="hljs-params">(BasePermission)</span>:</span>
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">has_object_permission</span><span class="hljs-params">(self, request, view, obj)</span>:</span>
+         print(obj.owner, request.user, <span class="hljs-string">&apos;+++++++++ views.py&apos;</span>)
+         <span class="hljs-keyword">if</span> obj.owner == request.user:
+             <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+         <span class="hljs-keyword">else</span>:
+             <span class="hljs-keyword">return</span> <span class="hljs-keyword">False</span>
 
-class TotalViews(GraphQLView):
-    def parse_body(self, request):
-        if type(request) is rest_framework.request.Request:
-            return request.data
-        return super().parse_body(request)
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">has_permission</span><span class="hljs-params">(self, request, view)</span>:</span>
+         print(request.user, <span class="hljs-string">&apos;===&gt;&gt;&gt; L&apos;</span>)
+         <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
 
-    # -----------
-    # &#x91CD;&#x65B0;&#x5B9A;&#x4E49; as_view() &#x7C7B;&#x65B9;&#x6CD5;
-    @classmethod
-    def as_view(cls, *args, **kwargs):
-        # &#x9700;&#x8981;&#x5728; URL &#x4E2D;&#x8FDB;&#x884C;&#x4F20;&#x9012;&#x53C2;&#x6570;
-        view = super(APGraphQLView, cls).as_view(*args, **kwargs)
-        view = permission_classes((IsAuthenticated,))(view)
-        view = authentication_classes(api_settings.DEFAULT_AUTHENTICATION_CLASSES)(view)
-        view = api_view([&apos;GET&apos;, &apos;POST&apos;])(view)
-        return view
-    # ------------
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TotalViews</span><span class="hljs-params">(GraphQLView)</span>:</span>
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">parse_body</span><span class="hljs-params">(self, request)</span>:</span>
+         <span class="hljs-keyword">if</span> type(request) <span class="hljs-keyword">is</span> rest_framework.request.Request:
+             <span class="hljs-keyword">return</span> request.data
+         <span class="hljs-keyword">return</span> super().parse_body(request)
 
-# &#x7B49;&#x540C;&#x4E8E;&#x91CD;&#x65B0;&#x5B9A;&#x4E49; as_view() &#x7C7B;&#x65B9;&#x6CD5;
-def drf_view(sc):
-    # &#x4F20;&#x9012;&#x53C2;&#x6570;
-    view = TotalView.as_view(graphiql=True, schema=sm)
-    view = permission_classes((OwnPermission, ))(view)
-    # view = authentication_classes((TokenAuthentication,))(view)
-    view = api_view([&apos;GET&apos;, &apos;POST&apos;])(view)
-    return view
-```
+     <span class="hljs-comment"># -----------</span>
+     <span class="hljs-comment"># &#x91CD;&#x65B0;&#x5B9A;&#x4E49; as_view() &#x7C7B;&#x65B9;&#x6CD5;</span>
+<span class="hljs-meta">     @classmethod</span>
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">as_view</span><span class="hljs-params">(cls, *args, **kwargs)</span>:</span>
+         <span class="hljs-comment"># &#x9700;&#x8981;&#x5728; URL &#x4E2D;&#x8FDB;&#x884C;&#x4F20;&#x9012;&#x53C2;&#x6570;</span>
+         view = super(APGraphQLView, cls).as_view(*args, **kwargs)
+         view = permission_classes((IsAuthenticated,))(view)
+         view = authentication_classes(api_settings.DEFAULT_AUTHENTICATION_CLASSES)(view)
+         view = api_view([<span class="hljs-string">&apos;GET&apos;</span>, <span class="hljs-string">&apos;POST&apos;</span>])(view)
+         <span class="hljs-keyword">return</span> view
+     <span class="hljs-comment"># ------------</span>
 
-- &lt;strong&gt;&#x6CE8;&#x610F;: &lt;/strong&gt; 
-&lt;span style=&quot;color: red&quot;&gt;
+ <span class="hljs-comment"># &#x7B49;&#x540C;&#x4E8E;&#x91CD;&#x65B0;&#x5B9A;&#x4E49; as_view() &#x7C7B;&#x65B9;&#x6CD5;</span>
+ <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">drf_view</span><span class="hljs-params">(sc)</span>:</span>
+     <span class="hljs-comment"># &#x4F20;&#x9012;&#x53C2;&#x6570;</span>
+     view = TotalView.as_view(graphiql=<span class="hljs-keyword">True</span>, schema=sm)
+     view = permission_classes((OwnPermission, ))(view)
+     <span class="hljs-comment"># view = authentication_classes((TokenAuthentication,))(view)</span>
+     view = api_view([<span class="hljs-string">&apos;GET&apos;</span>, <span class="hljs-string">&apos;POST&apos;</span>])(view)
+     <span class="hljs-keyword">return</span> view
+</code></pre>
+<ul>
+<li><strong>&#x6CE8;&#x610F;: </strong> 
+<span style="color: red">
 urls&#x4F1A;&#x53D1;&#x751F;&#x4E0D;&#x540C;: as_view&#x7684;&#x91CD;&#x5199;&#x5219;&#x5728;url&#x4E2D;&#x4F20;&#x9012;&#x53C2;&#x6570;, drf_view&#x5728;&#x65B9;&#x6CD5;&#x4E2D;&#x5B9A;&#x4E49;&#x53C2;&#x6570;
-&lt;/span&gt;
-</code></pre><ol>
+</span></li>
+</ul>
+</li>
 <li><p>app &#x4E0B;&#x521B;&#x5EFA; schema &#x6587;&#x4EF6;; &#x6587;&#x4EF6;&#x5939;&#x4E0B;&#x521B;&#x5EFA; get.py/create.py/update.py ...</p>
-<p> ```python</p>
-<h1 id="&#x7B80;&#x5355;&#x4E3E;&#x4F8B;">&#x7B80;&#x5355;&#x4E3E;&#x4F8B;</h1>
-<p> from .typemodels import InfoType
- from .models import Info</p>
+<pre><code class="lang-python"> <span class="hljs-comment"># &#x7B80;&#x5355;&#x4E3E;&#x4F8B;</span>
+ <span class="hljs-keyword">from</span> .typemodels <span class="hljs-keyword">import</span> InfoType
+ <span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> Info
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppQuery</span><span class="hljs-params">(object)</span>:</span>
+     all_info = graphene.List(InfoType)
+
+     own_info = graphene.Field(InfoType, pk=graphene.Int())
+
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">resolve_all_info</span><span class="hljs-params">(self, info, **kwargs)</span>:</span>
+         <span class="hljs-keyword">return</span> Info.objects.all()
+
+     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">resolve_own_info</span><span class="hljs-params">(self, info, pk)</span>:</span>
+         <span class="hljs-keyword">return</span> Info.objects.filter(id=pk)
+</code></pre>
 </li>
-</ol>
-<pre><code>class AppQuery(object):
-    all_info = graphene.List(InfoType)
-
-    own_info = graphene.Field(InfoType, pk=graphene.Int())
-
-    def resolve_all_info(self, info, **kwargs):
-        return Info.objects.all()
-
-    def resolve_own_info(self, info, pk):
-        return Info.objects.filter(id=pk)
-```
-</code></pre><ol>
 <li><p>&#x9879;&#x76EE; settings &#x540C;&#x7EA7;&#x76EE;&#x5F55;&#x4E0B;&#x521B;&#x5EFA;&#x603B;&#x7684; schema.py</p>
-<p> ```python
- from app.schema.get import AppQuery</p>
-<p> import graphene</p>
+<pre><code class="lang-python"> <span class="hljs-keyword">from</span> app.schema.get <span class="hljs-keyword">import</span> AppQuery
+
+ <span class="hljs-keyword">import</span> graphene
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Query</span><span class="hljs-params">(AppQuery, graphene.ObjectType)</span>:</span>
+     <span class="hljs-keyword">pass</span>
+
+ schema = graphene.Schema(query=Query)   <span class="hljs-comment"># (mutation=Mutation)</span>
+</code></pre>
 </li>
-</ol>
-<pre><code>class Query(AppQuery, graphene.ObjectType):
-    pass
-
-schema = graphene.Schema(query=Query)   # (mutation=Mutation)
-
-```
-</code></pre><ol>
 <li><p>&#x6DFB;&#x52A0; urls.py</p>
 <pre><code class="lang-python"> <span class="hljs-comment"># &#x9879;&#x76EE;&#x603B;&#x8DEF;&#x5F84;</span>
  urlpatterns = [
@@ -553,7 +546,7 @@ schema = graphene.Schema(query=Query)   # (mutation=Mutation)
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"框架结合","level":"1.2.3","depth":2,"next":{"title":"GET","level":"1.2.4","depth":2,"path":"get.md","ref":"get.md","articles":[]},"previous":{"title":"Python结合","level":"1.2.2","depth":2,"path":"python.md","ref":"python.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"drf.md","mtime":"2019-02-19T03:13:53.418Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:19:16.003Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"框架结合","level":"1.2.3","depth":2,"next":{"title":"GET","level":"1.2.4","depth":2,"path":"get.md","ref":"get.md","articles":[]},"previous":{"title":"Python结合","level":"1.2.2","depth":2,"path":"python.md","ref":"python.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"drf.md","mtime":"2019-02-19T05:36:41.661Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T05:37:02.660Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
@@ -561,10 +554,6 @@ schema = graphene.Schema(query=Query)   # (mutation=Mutation)
         
     <script src="gitbook/gitbook.js"></script>
     <script src="gitbook/theme.js"></script>
-    
-        
-        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
-        
     
         
         <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>

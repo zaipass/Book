@@ -61,7 +61,6 @@
     ```python
     from django.db import models
 
-
     class Info(models.Model):
         weight = models.DecimalField(max_digits=3, 
                                      decimal_places=1,
@@ -107,7 +106,6 @@
     from rest_framework.decorators import authentication_classes, permission_classes, api_view
     from rest_framework.settings import api_settings
 
-
     # 定义权限问题
     class OwnPermission(BasePermission):
         def has_object_permission(self, request, view, obj):
@@ -120,7 +118,6 @@
         def has_permission(self, request, view):
             print(request.user, '===>>> L')
             return True
-
 
     class TotalViews(GraphQLView):
         def parse_body(self, request):
@@ -162,7 +159,6 @@
     from .typemodels import InfoType
     from .models import Info
 
-
     class AppQuery(object):
         all_info = graphene.List(InfoType)
 
@@ -181,7 +177,6 @@
     from app.schema.get import AppQuery
 
     import graphene
-
 
     class Query(AppQuery, graphene.ObjectType):
         pass
