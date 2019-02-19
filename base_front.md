@@ -48,7 +48,7 @@
         }
     }`
 
-    const mutation_msg = `mutation createInfo {
+    const mutation_info = `mutation createInfo {
     createInfo(weight: "23") {
         info {
             id, 
@@ -58,7 +58,7 @@
     }
     `
 
-    const update_msg = `mutation updateInfo{
+    const update_info = `mutation updateInfo{
     updateInfo(pk: 1, weight: "111") {
         msg {
             id
