@@ -10,6 +10,4 @@
         * [创建](create.md)
         * [修改/更新](update.md)
         * [删除](delete.md)
-* [0214](index.md)
-    * [内置包的使用-数据库and查询](often.md)
 
